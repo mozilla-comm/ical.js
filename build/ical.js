@@ -7090,7 +7090,7 @@ ICAL.RecurIterator = (function() {
         return null;
       }
 
-      if (this.occurrence_number == 0 && this.last.compare(this.dtstart) >= 0) {
+      if (this.occurrence_number == 0 && (this.last.compare(this.dtstart) >= 0 && this.validate_bysetpos())) {
         // First of all, give the instance that was initialized
         this.occurrence_number++;
         return this.last;
@@ -7221,6 +7221,51 @@ ICAL.RecurIterator = (function() {
       }
 
       return end_of_data;
+    },
+
+    /*
+     * Checks if the computed last date is valid for given bysetpos rule
+     */
+    validate_bysetpos: function () {
+      if (!this.has_by_data("BYSETPOS")) {
+        return true;
+      }
+
+      var currentJson = this.rule.toJSON();
+      delete currentJson.bysetpos;
+      delete currentJson.count;
+      var recurWithoutBysetPos = ICAL.Recur.fromData(currentJson);
+      var iterator = recurWithoutBysetPos.iterator(this.dtstart);
+      var datesList = [];
+      var endDate;
+      var date = iterator.next();
+      if(date == null) {
+        return false;
+      }
+      if(this.rule.freq == "YEARLY") {
+        endDate = date.endOfYear();
+      } else if(this.rule.freq == "MONTHLY") {
+        endDate = date.endOfMonth();
+      } else if(this.rule.freq == "WEEK") {
+        endDate = date.endOfWeek();
+      } else {
+        return true;
+      }
+      datesList.push(date.clone());
+      while(date = iterator.next()) {
+        if(endDate.compare(date) < 0) {
+          break;
+        }
+        datesList.push(date.clone());
+      }
+
+      var isValidBysetPos = false;
+      for(var idx = 0; idx < datesList.length; idx++) {
+        if(this.last.compare(datesList[idx]) == 0) {
+          isValidBysetPos = this.check_set_position(idx + 1) || this.check_set_position(idx - datesList.length);
+        }
+      }
+      return isValidBysetPos;
     },
 
     /**

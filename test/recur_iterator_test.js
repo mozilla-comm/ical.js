@@ -217,12 +217,10 @@ suite('recur_iterator', function() {
         max = options.dates.length;
       }
 
-      assert.equal(recur.isFinite(), options.byCount || options.until || false);
-      assert.equal(recur.isByCount(), options.byCount || false);
-
       while (inc++ < max && (next = iterator.next())) {
         dates.push(next.toString());
       }
+
       assert.deepEqual(dates, options.dates || []);
     });
   }
@@ -984,8 +982,377 @@ suite('recur_iterator', function() {
         ]
       });
 
-      /* 
-       * Leap-year test for February 29th 
+      //DAILY TESTS
+
+      testRRULE('FREQ=DAILY;INTERVAL=2;COUNT=3', {
+        dtStart: '2013-01-01',
+        byCount: true,
+        dates: [
+          '2013-01-01',
+          '2013-01-03',
+          '2013-01-05'
+        ]
+      });
+
+      testRRULE('FREQ=DAILY;INTERVAL=321;COUNT=3', {
+        dtStart: '2013-01-01',
+        byCount: true,
+        dates: [
+          '2013-01-01',
+          '2013-11-18',
+          '2014-10-05'
+        ]
+      });
+
+      testRRULE('FREQ=DAILY;INTERVAL=366', {
+        dtStart: '2013-01-01',
+        dates: [
+          '2013-01-01',
+          '2014-01-02',
+          '2015-01-03',
+          '2016-01-04'
+        ]
+      });
+
+      testRRULE('FREQ=DAILY;INTERVAL=366;UNTIL=2016-01-04', {
+        dtStart: '2013-01-01',
+        until: true,
+        dates: [
+          '2013-01-01',
+          '2014-01-02',
+          '2015-01-03',
+          '2016-01-04'
+        ]
+      });
+
+      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=2016-01-01', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01'
+        ]
+      });
+
+      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=2016-01-02', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-02'
+        ]
+      });
+
+      //Weekly Tests
+      // 2016-01-01 - Friday
+
+      // This can be confusing - If StartDate satisifies with the rule, first instance (startdate) is included, and the next is not. (Alternate)
+      // If startDate doesn't satisfy with rule, first instance is omitted, next is added, and Alternate ones work
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-01-10', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-10'
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-03-01', {
+        dtStart: '2016-01-03',
+        until: true,
+        dates: [
+          '2016-01-03',
+          '2016-01-17',
+          '2016-01-31',
+          "2016-02-14",
+          "2016-02-28"
+        ]
+      });
+
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-01-03', {
+        dtStart: '2016-01-03',
+        until: true,
+        dates: [
+          '2016-01-03'
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=FR;COUNT=2', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-01-01',
+          '2016-01-15',
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;COUNT=1', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-01-10'
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=1;BYDAY=SU,MO,TU,WE,TH,FR,SA;UNTIL=2016-01-07', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-02',
+          '2016-01-03',
+          '2016-01-04',
+          '2016-01-05',
+          '2016-01-06',
+          '2016-01-07'
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=FR,SA;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-02',
+          '2016-01-15'
+        ]
+      });
+
+      testRRULE('FREQ=WEEKLY;INTERVAL=53;BYDAY=FR,SA;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-02',
+          '2017-01-06'
+        ]
+      });
+
+      //Monthly Tests
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=1,2,3;INTERVAL=1;COUNT=7', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-02',
+          '2016-01-03',
+          '2016-02-01',
+          '2016-02-02',
+          '2016-02-03',
+          '2016-03-01',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=1,3;INTERVAL=2;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-01',
+          '2016-01-03',
+          '2016-03-01',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=3,4;INTERVAL=2;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-03',
+          '2016-01-04',
+          '2016-03-03',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=3,4;INTERVAL=2;UNTIL=2016-03-03', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-03',
+          '2016-01-04',
+          '2016-03-03',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=31;INTERVAL=1;UNTIL=2016-12-31', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-31',
+          '2016-03-31',
+          '2016-05-31',
+          '2016-07-31',
+          '2016-08-31',
+          '2016-10-31',
+          '2016-12-31',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=29;INTERVAL=1;UNTIL=2016-06-30', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-29',
+          '2016-02-29',
+          '2016-03-29',
+          '2016-04-29',
+          '2016-05-29',
+          '2016-06-29',
+        ]
+      });
+
+      // Failing. https://github.com/mozilla-comm/ical.js/issues/328
+      // First date is counted here as valid. It should not be
+      testRRULE('FREQ=MONTHLY;BYSETPOS=-1;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=1;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-31',
+          '2016-02-29',
+          '2016-03-31',
+          ]
+      });
+
+      // Failing. Returns ["2016-01-01","2016-01-02", "2016-02-02"]
+      testRRULE('FREQ=MONTHLY;BYSETPOS=2;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=1;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-02',
+          '2016-02-02',
+          '2016-03-02',
+        ]
+      });
+
+      // Failing
+      // Takes the first sunday as correct and returns ["2016-01-03", "2016-01-24", "2016-02-28"]
+      testRRULE('FREQ=MONTHLY;BYSETPOS=4;BYDAY=SU;INTERVAL=1;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-24',
+          '2016-02-28',
+          '2016-03-27',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYSETPOS=1;BYDAY=SU;INTERVAL=1;COUNT=3', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-03',
+          '2016-02-07',
+          '2016-03-06',
+        ]
+      });
+
+      testRRULE('FREQ=MONTHLY;BYSETPOS=1;BYDAY=SU;INTERVAL=1;UNTIL=2016-03-06', {
+        dtStart: '2016-01-01',
+        until: true,
+        dates: [
+          '2016-01-03',
+          '2016-02-07',
+          '2016-03-06',
+        ]
+      });
+
+      //YEARLY TESTS
+
+      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;COUNT=3', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-02-21',
+          '2017-02-21',
+          '2018-02-21',
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=2018-02-20', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-02-21',
+          '2017-02-21',
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=2018-02-21', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-02-21',
+          '2017-02-21',
+          '2018-02-21'
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYDAY=SU;BYSETPOS=1;BYMONTH=1;COUNT=3', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-01-03',
+          '2017-01-01',
+          '2018-01-07'
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYDAY=SA;BYSETPOS=-1;BYMONTH=3;COUNT=3', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-03-26',
+          '2017-03-25',
+          '2018-03-31'
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYDAY=SA;BYSETPOS=-1;BYMONTH=3;COUNT=3;INTERVAL=2', {
+        dtStart: '2016-01-01',
+        dates: [
+          '2016-03-26',
+          '2018-03-31',
+          '2020-03-28',
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYDAY=SU;BYSETPOS=-1;BYMONTH=3;COUNT=3;INTERVAL=2', {
+        dtStart: '2016-03-27',
+        dates: [
+          '2016-03-27',
+          '2018-03-25',
+          '2020-03-29',
+        ]
+      });
+
+      testRRULE('FREQ=YEARLY;BYDAY=SU;BYSETPOS=-1;BYMONTH=3;INTERVAL=2;UNTIL=2020-03-29', {
+        dtStart: '2016-03-27',
+        dates: [
+          '2016-03-27',
+          '2018-03-25',
+          '2020-03-29',
+        ]
+      });
+
+
+      //This test fails. Rrule doesn't work for leap year
+      // Returns ["2016-02-01", "2016-02-21", "2016-03-02", "2017-02-01", "2017-02-21", "2017-03-03"]
+      // testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=1,21,31;COUNT=6', {
+      //   dtStart: '2016-01-01',
+      //   dates: [
+      //     '2016-02-01',
+      //     '2016-02-21',
+      //     '2017-02-01',
+      //     '2017-02-21',
+      //     '2018-02-01',
+      //     '2018-02-21',
+      //   ]
+      // });
+
+      //This test fails. Doesn't work for leap year
+      // testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=29;COUNT=3', {
+      //  dtStart: '2013-01-01',
+      //  dates: [
+      //  '2016-02-29',
+      //  '2020-02-29',
+      //  '2024-02-29',
+      //  ]
+      //  });
+
+
+      /*
+       * Leap-year test for February 29th
        *
        * See https://github.com/mozilla-comm/ical.js/issues/91
        * for details
