@@ -1014,7 +1014,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=DAILY;INTERVAL=366;UNTIL=2016-01-04', {
+      testRRULE('FREQ=DAILY;INTERVAL=366;UNTIL=20160104', {
         dtStart: '2013-01-01',
         until: true,
         dates: [
@@ -1025,7 +1025,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=2016-01-01', {
+      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=20160101', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1033,7 +1033,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=2016-01-02', {
+      testRRULE('FREQ=DAILY;INTERVAL=1;UNTIL=20160102', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1047,7 +1047,7 @@ suite('recur_iterator', function() {
 
       // This can be confusing - If StartDate satisifies with the rule, first instance (startdate) is included, and the next is not. (Alternate)
       // If startDate doesn't satisfy with rule, first instance is omitted, next is added, and Alternate ones work
-      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-01-10', {
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=20160110', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1055,7 +1055,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-03-01', {
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=20160301', {
         dtStart: '2016-01-03',
         until: true,
         dates: [
@@ -1068,7 +1068,7 @@ suite('recur_iterator', function() {
       });
 
 
-      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=2016-01-03', {
+      testRRULE('FREQ=WEEKLY;INTERVAL=2;BYDAY=SU;UNTIL=20160103', {
         dtStart: '2016-01-03',
         until: true,
         dates: [
@@ -1091,7 +1091,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=WEEKLY;INTERVAL=1;BYDAY=SU,MO,TU,WE,TH,FR,SA;UNTIL=2016-01-07', {
+      testRRULE('FREQ=WEEKLY;INTERVAL=1;BYDAY=SU,MO,TU,WE,TH,FR,SA;UNTIL=20160107', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1160,7 +1160,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=MONTHLY;BYMONTHDAY=3,4;INTERVAL=2;UNTIL=2016-03-03', {
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=3,4;INTERVAL=2;UNTIL=20160303', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1170,7 +1170,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=MONTHLY;BYMONTHDAY=31;INTERVAL=1;UNTIL=2016-12-31', {
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=31;INTERVAL=1;UNTIL=20161231', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1184,7 +1184,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=MONTHLY;BYMONTHDAY=29;INTERVAL=1;UNTIL=2016-06-30', {
+      testRRULE('FREQ=MONTHLY;BYMONTHDAY=29;INTERVAL=1;UNTIL=20160630', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1242,7 +1242,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=MONTHLY;BYSETPOS=1;BYDAY=SU;INTERVAL=1;UNTIL=2016-03-06', {
+      testRRULE('FREQ=MONTHLY;BYSETPOS=1;BYDAY=SU;INTERVAL=1;UNTIL=20160306', {
         dtStart: '2016-01-01',
         until: true,
         dates: [
@@ -1263,7 +1263,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=2018-02-20', {
+      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=20180220', {
         dtStart: '2016-01-01',
         dates: [
           '2016-02-21',
@@ -1271,7 +1271,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=2018-02-21', {
+      testRRULE('FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=21;UNTIL=20180221', {
         dtStart: '2016-01-01',
         dates: [
           '2016-02-21',
@@ -1316,7 +1316,7 @@ suite('recur_iterator', function() {
         ]
       });
 
-      testRRULE('FREQ=YEARLY;BYDAY=SU;BYSETPOS=-1;BYMONTH=3;INTERVAL=2;UNTIL=2020-03-29', {
+      testRRULE('FREQ=YEARLY;BYDAY=SU;BYSETPOS=-1;BYMONTH=3;INTERVAL=2;UNTIL=20200329', {
         dtStart: '2016-03-27',
         dates: [
           '2016-03-27',
