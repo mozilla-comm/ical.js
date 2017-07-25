@@ -1140,6 +1140,17 @@ suite('recur_iterator', function() {
         ]
       });
 
+      testRRULE('FREQ=MONTHLY;INTERVAL=1;BYDAY=SU;BYSETPOS=3;COUNT=3', {
+        dtStart: '2017-07-15',
+        until: true,
+        dates: [
+          '2017-07-16',
+          "2017-08-20",
+          '2017-09-17',
+        ]
+      });
+
+
       testRRULE('FREQ=MONTHLY;BYMONTHDAY=1,3;INTERVAL=2;COUNT=3', {
         dtStart: '2016-01-01',
         until: true,
@@ -1197,8 +1208,6 @@ suite('recur_iterator', function() {
         ]
       });
 
-      // Failing. https://github.com/mozilla-comm/ical.js/issues/328
-      // First date is counted here as valid. It should not be
       testRRULE('FREQ=MONTHLY;BYSETPOS=-1;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=1;COUNT=3', {
         dtStart: '2016-01-01',
         until: true,
@@ -1209,7 +1218,6 @@ suite('recur_iterator', function() {
           ]
       });
 
-      // Failing. Returns ["2016-01-01","2016-01-02", "2016-02-02"]
       testRRULE('FREQ=MONTHLY;BYSETPOS=2;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=1;COUNT=3', {
         dtStart: '2016-01-01',
         until: true,
@@ -1220,8 +1228,6 @@ suite('recur_iterator', function() {
         ]
       });
 
-      // Failing
-      // Takes the first sunday as correct and returns ["2016-01-03", "2016-01-24", "2016-02-28"]
       testRRULE('FREQ=MONTHLY;BYSETPOS=4;BYDAY=SU;INTERVAL=1;COUNT=3', {
         dtStart: '2016-01-01',
         until: true,
